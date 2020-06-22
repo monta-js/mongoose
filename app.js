@@ -10,127 +10,85 @@ mongoose.connect('mongodb://localhost:27017/Person-list',
   .catch(() => console.log('Connexion à MongoDB échouée !'));
 
   // Create and Save a Record of a Model
-  var createAndSavePerson = function(done) {
-    var person = new Person({name: 'montassar', age: 28, favouriteFoods: ["couscous", "poissons","salade"]})
-    person.save((err, data)=>{
-     if (err) console.log(err)
-     return done(null, data)
-    })
-   }  
+
+    // const CreatePerson = new Person({name: 'montassar', age: 28, favouriteFoods: ["couscous", "poissons","salade"]})
+    // CreatePerson.save()
+    //    .then (data => { console.log(data)}) 
+    //    .catch(err => { console.error(err)})  
+   
 
   //Create Many Records with model.create()
-
-  let arrayOfPeople = [
-    { name: 'montassar', age : 28, favoriteFoods : ["couscous", "poissons","salade"]},
-    { name: 'houssem', age : 36, favoriteFoods : ["pizza", "escalope avec sauce blanche","lasagne"]},
-    { name: 'pati', age : 24, favoriteFoods : ["couscous", "makloub","Pates"]}
-  ];
-
-  //Create Many Records with model.create()
-
-   var createManyPeople = function(arrayOfPeople, done) {
-    Model.create(arrayOfPeople, (err, data) => {
-      if(err) {
-         done(err); 
-      }
-    done(null, data);
-    }) 
-};
+  
+  // const people = [
+  //   { name: 'montassar', age : 28, favoriteFoods : ["couscous", "poissons","salade"]},
+  //   { name: 'houssem', age : 27, favoriteFoods : ["pizza", "escalope avec sauce blanche","lasagne"]},
+  //   { name: 'pati', age : 28, favoriteFoods : ["couscous", "makloub","Pates"]}
+  // ]
+  // Person.create(people)
+  //     .then (data => { console.log(data)}) 
+  //     .catch(err => { console.error(err)})
 
 //Use model.find() to Search Your Database
 
-let personName = 'montassar'
-var findPeopleByName = function(personName, done) {
-  Person.find(personName, function (err, data) {
-  if(err){
-    return done(err);
-  }
-  return done(null, data);
-  })
-};
+// Person.find({name : { $exists: true }})
+//    .then (doc => { console.log(doc)}) 
+//    .catch(err => { console.error(err)})
 
   //Use model.findOne() to Return a Single Matching Document from Your Database
-  let food = "makloub"
-  var findOneByFood = function(food, done) {
-    Person.find({favoriteFoods:food},(err,data)=>{
-      if(err) return done(err)
-       done(null,data)
-    }); 
-  };
+
+  // Person.findOne({favoriteFoods : {$in : ["pizza"]}})
+  //    .then (data => { console.log(data)}) 
+  //    .catch(err => { console.error(err)})
+
 
   //Use model.findById() to Search Your Database By _id
 
-  var findPersonById = function(personId, done) {   
-    Person.findById(personId, function(err, data){
-       if(err) { done(err); }
-       else { done(null,data); }
-  })  
-  };
+  // Person.findById("5ef0d3b0227bac23accea9bc")
+  //    .then (data => { console.log(data)}) 
+  //    .catch(err => { console.error(err)})
+
 
 //Perform Classic Updates by Running Find, Edit, then Save
 
-var findEditThenSave = function(personId, done) {
-  var foodToAdd = 'hamburger';
-  Person.findById(personId, function(err, data) {
-    this.favoriteFoods.push(foodToAdd).save();
-    if (err) {
-      return done(err);
-    }
-    else {
-      done(null, data);
-    }
-  });
-};
+// Person.findById('5ef0d3b0227bac23accea9bc')
+//    .then(data=>{data.favoriteFoods.push("Humburger");
+//     data.save()})
+//     .catch(err => { console.error(err)})
 
 //Perform New Updates on a Document Using model.findOneAndUpdate()
 
-var findAndUpdate = function(personName, done) {
-  var ageToSet = 20;
-  Person.findOneAndUpdate(
-    {"name": personName},
-    {$set: {"age":ageToSet}},{returnNewDocument : true}, 
-    function(err, doc){
-                    if(err){
-                        console.log("Something wrong when updating record!");
-                    }
-                    console.log(doc);
-})};
+// Person.findOneAndUpdate({name : "houssem"}, {age : 20}, {new:true})
+//    .then (data => { console.log(data)}) 
+//    .catch(err => { console.error(err)})
+
 
 
 // Delete One Document Using model.findByIdAndRemove
 
-var removeById = function(personId, done) {
-  Model.findByIdAndRemove(personId, (err, data) => err ? done(err) : done(null, data));
-  };
+// Person.findByIdAndRemove('5ef0d72bd90c924d98254bec')
+//    .then (data => { console.log(data)}) 
+//    .catch(err => { console.error(err)})
 
 
 //MongoDB and Mongoose - Delete Many Documents with model.remove()
 
-var removeManyPeople = function(done) {
-  var nameToRemove = "pati";
-  Person.deleteMany(
-  {name: nameToRemove},
-  (err, data) => {
-  if (err) {
-  done(err);
-  }
-  done(null, data);
-  }
-  )
-  };
+// Person.remove({name:"houssem"})
+//    .then (() => { console.log("delete all peoples having houssem name")}) 
+//    .catch(err => { console.error(err)})
+
 
 //Chain Search Query Helpers to Narrow Search Results
 
-var queryChain = function(done) {
-  var foodToSearch = "burrito";
-  person.find( { favoriteFoods: { "$in" : ["burrito"]}})
-        .sort({name:1})
-        .limit(2)
-        .select({name:true, favoriteFoods:true}).exec((err, data) => {
-     if(err)
-       done(err);
-    done(null, data);
-  })
-};
+// Person.find({ favoriteFoods: { $in: ["couscous"] } })
+//   .sort({ name: 1 })
+//   .select("-age")
+//   .limit(2)
+//   .exec()
+//   .then((data) => {
+//     console.log(data);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//   });
 
 module.exports = app;
